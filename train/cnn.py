@@ -14,32 +14,32 @@ from keras import layers
 from keras.regularizers import l2
 import keras
 
-def CNN(input_shape = (227, 227)):
+def CNN(input_shape = (227, 227, 1)):
     model = Sequential()
     input = Input(shape=input_shape)
 
-    conv1 = Conv2D(96, (11, 11), stride=(4, 4), input_shape=input_shape, activation='relu', name='conv1')(input)
-    max1 = MaxPooling2D((3, 3), name='maxpool1')(conv1)
+    conv1 = Conv2D(96, (11, 11), strides=(4, 4), input_shape=input_shape, activation='relu', name='conv1')(input)
+    max1 = MaxPooling2D((3, 3), strides=(2, 2), name='maxpool1')(conv1)
     max1 = BatchNormalization()(max1)
 
-    conv1a = Conv2D(256, (4, 4), stride=(4, 4), name='conv1a', activation='relu')(max1)
+    conv1a = Conv2D(256, (4, 4), strides=(4, 4), name='conv1a', activation='relu')(max1)
     conv1a = BatchNormalization()(conv1a)
 
-    conv2 = Conv2D(256, (5, 5), activation='relu', name='conv2', padding='same')(max1)
-    max2 = MaxPooling2D((3, 3), name='max2')(conv2)
+    conv2 = Conv2D(256, (5, 5), strides=(1, 1), activation='relu', name='conv2', padding='same')(max1)
+    max2 = MaxPooling2D((3, 3), name='max2', strides=(2, 2))(conv2)
     max2 = BatchNormalization()(max2)
 
-    conv3 = Conv2D(384, (3, 3), activation='relu', name='conv3', padding='same')(max2)
+    conv3 = Conv2D(384, (3, 3), strides=(1, 1) ,activation='relu', name='conv3', padding='same')(max2)
     conv3 = BatchNormalization()(conv3)
 
-    conv3a = Conv2D(256, (2, 2), stride=(2, 2), activation='relu', name='conv3a')(conv3)
+    conv3a = Conv2D(256, (2, 2), strides=(2, 2), activation='relu', name='conv3a')(conv3)
     conv3a = BatchNormalization()(conv3a)
 
     conv4 = Conv2D(384, (3, 3), activation='relu', name='conv4', padding='same')(conv3)
     conv4 = BatchNormalization()(conv4)
 
     conv5 = Conv2D(256, (3, 3), activation='relu', name='conv5', padding='same')(conv4)
-    pool5 = MaxPooling2D((3, 3), stride=(2, 2), name='pool5')(conv5)
+    pool5 = MaxPooling2D((3, 3), strides=(2, 2), name='pool5')(conv5)
     pool5 = BatchNormalization()(pool5)
 
     concat = Concatenate(name='concat')([conv1a, conv3a, pool5])
