@@ -1,5 +1,8 @@
 '''
-Gender classification cnn based on the model proposed in Hyperface
+Gender classification cnn based on the model proposed Hyperface (2016)
+https://arxiv.org/pdf/1603.01249.pdf
+Author: Skylar Liang
+Date: Oct 30, 2019
 '''
 from keras.layers import Activation, Convolution2D, Dropout, Conv2D, Concatenate
 from keras.layers import AveragePooling2D, BatchNormalization
@@ -51,8 +54,8 @@ def CNN(input_shape = (227, 227, 1)):
 
     fc_all = Dense(3072, activation='relu')(flatten)
 
+    # add more fully connected layers and out layers here if want to exploit other functions mentioned in the paper
     fc_gender = Dense(512, activation='relu')(fc_all)
-
     out_gender = Dense(2, activation='softmax')(fc_gender)
 
     model = Model(inputs=input, outputs=out_gender)
