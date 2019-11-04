@@ -1,23 +1,22 @@
 from keras.callbacks import CSVLogger, ModelCheckpoint, EarlyStopping
 from keras.callbacks import ReduceLROnPlateau
 from keras.preprocessing.image import ImageDataGenerator
+from keras import optimizers
 
 from cnn import CNN
-from data_processing import load_data, preprocess_input, split_data
+from data_processing import load_data, preprocess_input, split_data, UTKLoad
 import numpy as np
 
 
 batch_size = 32
-num_epochs = 10000
-input_shape = (48, 48, 1)
-size=(227, 227)
+num_epochs = 1000
+size = (227, 227)
 validation_split = .2
 verbose = 1
-num_classes = 2
-patience = 100
+patience = 50
 base_path = '../models/'
-data_path = '../gender_data/'
-
+data_path = '../original_faces/'
+# data_path = '../test/UTKFace/'
 
 def main():
     # data generator
@@ -31,7 +30,8 @@ def main():
         horizontal_flip=True)
 
     model = CNN()
-    model.compile('adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    opt = optimizers.SGD(lr=0.01)
+    model.compile(opt, loss='categorical_crossentropy', metrics=['accuracy'])
     model.summary()
 
     # callbacks
@@ -42,12 +42,13 @@ def main():
     early_stop = EarlyStopping('val_loss', patience=patience)
     reduce_lr = ReduceLROnPlateau('val_loss', factor=0.1, patience=int(patience/4), verbose=1)
 
-    trained_models = base_path + 'CNN.{epoch:02d}-{val_loss:.3f}-{val_accuracy:.2f}.hdf5'
+    trained_models = base_path + 'CNN.{epoch:02d}-{val_loss:.3f}-{val_acc:.2f}.hdf5'
     model_cp = ModelCheckpoint(trained_models, 'val_loss', verbose=1, save_best_only=True)
     callbacks = [model_cp, csv_logger, early_stop, reduce_lr]
 
     # load data
     faces, labels = load_data(data_path)
+    # faces, labels = UTKLoad(data_path)
     print (len(faces))
     print (len(labels))
     faces = preprocess_input(faces)
