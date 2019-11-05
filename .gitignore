@@ -103,6 +103,13 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-original faces/
+original_faces/
+gender_data/
+positive/
+models/
+test/UTKFace/
+test/UTKClassify.py
 
 .idea/
+
+.gitignore

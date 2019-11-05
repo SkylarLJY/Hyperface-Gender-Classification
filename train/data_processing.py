@@ -3,6 +3,7 @@ import numpy as np
 import os
 import cv2
 
+
 def load_data(path, size=(227, 227)):
     faces = []
     labels = []
@@ -45,3 +46,29 @@ def split_data(x, y, validation_split=.2):
     train_data = (train_x, train_y)
     val_data = (val_x, val_y)
     return train_data, val_data
+
+
+def UTKLoad(path, size=(227, 227)):
+    imgs = os.listdir(path)
+    faces = []
+    labels = []
+    file_list = ['male', 'female']
+    label_list = [0, 1]
+    for i in imgs:
+        age, gender, _ = i.split('_', 2)
+        age = int(age)
+        gender = int(gender)
+        gender = file_list[gender]
+        # babies and senior people don't have distinctive gender features so not selected
+        # if age < 15 or age > 70:
+        #     continue
+        face = cv2.imread(os.path.join(path, i), cv2.IMREAD_GRAYSCALE)
+        face = cv2.resize(face, size)
+        faces.append(face.astype('float32'))
+        labels.append(gender)
+    faces = np.asarray(faces)
+    faces = np.expand_dims(faces, -1)
+    labels = pd.get_dummies(labels).as_matrix()
+
+    return faces, labels
+
