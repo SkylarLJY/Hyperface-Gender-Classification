@@ -13,10 +13,11 @@ num_epochs = 1000
 size = (227, 227)
 validation_split = .2
 verbose = 1
-patience = 50
+patience = 100
 base_path = '../models/'
 data_path = '../original_faces/'
 # data_path = '../test/UTKFace/'
+
 
 def main():
     # data generator
@@ -30,7 +31,9 @@ def main():
         horizontal_flip=True)
 
     model = CNN()
-    opt = optimizers.SGD(lr=0.01)
+    opt = optimizers.Adam(lr=0.0001)
+    # opt = optimizers.SGD(lr=0.001)
+
     model.compile(opt, loss='categorical_crossentropy', metrics=['accuracy'])
     model.summary()
 
@@ -43,6 +46,7 @@ def main():
     reduce_lr = ReduceLROnPlateau('val_loss', factor=0.1, patience=int(patience/4), verbose=1)
 
     trained_models = base_path + 'CNN.{epoch:02d}-{val_loss:.3f}-{val_acc:.2f}.hdf5'
+    # model_cp = ModelCheckpoint(trained_models, 'val_acc', verbose=1, save_best_only=True)
     model_cp = ModelCheckpoint(trained_models, 'val_loss', verbose=1, save_best_only=True)
     callbacks = [model_cp, csv_logger, early_stop, reduce_lr]
 

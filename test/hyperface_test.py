@@ -6,14 +6,14 @@ import time
 import os
 import shutil
 from keras.models import load_model
-from cnn import CNN
 sys.path.append('../train')
 from data_processing import preprocess_input, UTKLoad, load_data
+# from cnn import CNN
 
 
-model_path = '../models/CNN.32-0.180-0.93.hdf5'
+model_path = '../models/CNN.64-0.232-0.92.hdf5'
 # test_data_path = './UTKFace'
-test_data_path = '../gender_data'
+test_data_path = '../original_faces/test'
 # test_date_path = '../positive'
 
 if __name__ == '__main__':
@@ -22,7 +22,8 @@ if __name__ == '__main__':
     model = load_model(model_path)
     print ('Done loading model')
     # test_faces, test_labels = UTKLoad(test_data_path)[:100]
-    test_faces, test_labels = load_data(test_data_path)[:1000]
+    test_faces, test_labels = load_data(test_data_path)
+    test_faces = preprocess_input(test_faces)
     print ('Done loading data')
 
     score = model.evaluate(test_faces, test_labels, verbose=2)
