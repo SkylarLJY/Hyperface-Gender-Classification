@@ -4,6 +4,7 @@ import os
 import cv2
 
 
+# Load the data to be fed into the CNN, the path contains two folders: male and female
 def load_data(path, size=(227, 227)):
     faces = []
     labels = []
@@ -48,6 +49,7 @@ def split_data(x, y, validation_split=.2):
     return train_data, val_data
 
 
+# Parse and classify UTK data set
 def UTKLoad(path, size=(227, 227)):
     imgs = os.listdir(path)
     faces = []

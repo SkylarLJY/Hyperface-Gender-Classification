@@ -52,7 +52,6 @@ def main():
 
     # load data
     faces, labels = load_data(data_path)
-    # faces, labels = UTKLoad(data_path)
     print (len(faces))
     print (len(labels))
     faces = preprocess_input(faces)

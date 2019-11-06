@@ -11,7 +11,7 @@ from data_processing import preprocess_input, UTKLoad, load_data
 # from cnn import CNN
 
 
-model_path = '../models/CNN.64-0.232-0.92.hdf5'
+model_path = '../models/CNN.35-0.173-0.93.hdf5'
 # test_data_path = './UTKFace'
 test_data_path = '../original_faces/test'
 # test_date_path = '../positive'
